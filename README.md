@@ -5,8 +5,8 @@
 ### Lab List
 
 - ✅ Lab 01 - CourseManagementAPI
-- ⏳ Lab 02 - DTO and Validation
-- ⏳ Lab 03 - 
+- ✅ Lab 02 - DTO and Validation
+- ✅ Lab 03 - Dependency Injection in NestJS
 - ⏳ Lab 04 - 
 
 Student: Ishrak Ahmad
