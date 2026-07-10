@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -35,8 +36,13 @@ async addProduct(
   // Product update korbe
   async updateProduct(
     id: number,
-    product: Product,
+    product: UpdateProductDto,
   ): Promise<Product | null> {
+  
+    await this.productRepository.update(id, product);
+  
+    return await this.getProductById(id);
+  
 
     // Age product update korchi
     await this.productRepository.update(id, product);
@@ -44,6 +50,20 @@ async addProduct(
     // Tarpor updated product return korchi
     return await this.getProductById(id);
   }
+
+
+  // Product er kichu field update korchi
+async patchProduct(
+  id: number,
+  product: UpdateProductDto,
+): Promise<Product | null> {
+
+  // Database e partial update korchi
+  await this.productRepository.update(id, product);
+
+  // Updated data return korchi
+  return await this.getProductById(id);
+}
 
   // Product delete korbe
   async deleteProduct(id: number) {
