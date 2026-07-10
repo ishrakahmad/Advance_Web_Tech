@@ -37,14 +37,14 @@ export class ProductsController {
 
   // ID diye ekta product dekhabe
   @Get(':id')
-  getProductById(@Param('id') id: number) {
+  getProductById(@Param('id' , ParseIntPipe ) id: number) {
     return this.productsService.getProductById(id);
   }
 
   // Product update korbe
   @Put(':id')
   updateProduct(
-    @Param('id') id: number,
+    @Param('id' , ParseIntPipe) id: number,
     @Body() product: UpdateProductDto,
   ) {
     return this.productsService.updateProduct(id, product);
@@ -54,7 +54,7 @@ export class ProductsController {
   // Product er kichu field update korbo
 @Patch(':id')
 patchProduct(
-  @Param('id') id: number,
+  @Param('id' , ParseIntPipe ) id: number,
   @Body() product: UpdateProductDto,
 ) {
   return this.productsService.patchProduct(id, product);
@@ -62,7 +62,7 @@ patchProduct(
 
   // Product delete korbe
   @Delete(':id')
-  deleteProduct(@Param('id') id: number) {
+  deleteProduct(@Param('id' , ParseIntPipe ) id: number) {
     return this.productsService.deleteProduct(id);
   }
 
