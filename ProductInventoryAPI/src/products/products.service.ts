@@ -87,6 +87,8 @@ async searchProducts(name: string): Promise<Product[]> {
     .getMany();
 }
 
+
+
 // Category diye product filter korbo
 async findByCategory(
   category: string,
@@ -97,6 +99,22 @@ async findByCategory(
       category,
     },
   });
+}
+
+
+
+
+// Product active/inactive toggle korbo
+async toggleActive(id: number): Promise<Product> {
+
+  // Age product khuje ber korchi
+  const product = await this.getProductById(id);
+
+  // Active value ulta kore dicchi
+  product.isActive = !product.isActive;
+
+  // Database e save korchi
+  return await this.productRepository.save(product);
 }
 
 

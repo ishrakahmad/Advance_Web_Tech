@@ -70,6 +70,14 @@ findByCategory(
   }
 
 
+  @Patch(':id/toggle')
+  toggleActive(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.productsService.toggleActive(id);
+  }  
+
+
   // Product er kichu field update korbo
 @Patch(':id')
 patchProduct(
