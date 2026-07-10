@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,  NotFoundException, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
@@ -27,17 +27,27 @@ async addProduct(
 }
 
   // ID diye ekta product khuje ber korbe
-  async getProductById(id: number): Promise<Product | null> {
-    return await this.productRepository.findOne({
+  async getProductById(id: number): Promise<Product> {
+
+    const product = await this.productRepository.findOne({
       where: { id },
     });
+  
+    if (!product) {
+      throw new NotFoundException(
+        `Product with ID ${id} not found`,
+      );
+    }
+  
+    return product;
   }
-
   // Product update korbe
   async updateProduct(
     id: number,
     product: UpdateProductDto,
-  ): Promise<Product | null> {
+  ): Promise<Product> {
+  
+    await this.getProductById(id);
   
     await this.productRepository.update(id, product);
   
@@ -53,27 +63,27 @@ async addProduct(
 
 
   // Product er kichu field update korchi
-async patchProduct(
-  id: number,
-  product: UpdateProductDto,
-): Promise<Product | null> {
-
-  // Database e partial update korchi
-  await this.productRepository.update(id, product);
-
-  // Updated data return korchi
-  return await this.getProductById(id);
-}
+  async patchProduct(
+    id: number,
+    product: UpdateProductDto,
+  ): Promise<Product> {
+  
+    await this.getProductById(id);
+  
+    await this.productRepository.update(id, product);
+  
+    return await this.getProductById(id);
+  }
 
   // Product delete korbe
   async deleteProduct(id: number) {
 
-    // Database theke product delete korchi
+    await this.getProductById(id);
+  
     await this.productRepository.delete(id);
-
+  
     return {
       message: 'Product deleted successfully',
     };
   }
-
 }
