@@ -8,12 +8,17 @@ import {
   Put,
   Patch,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 
 import { UpdateProductDto } from './dto/update-product.dto';
+
+
+
+
 
 @Controller('products')
 export class ProductsController {
@@ -29,6 +34,20 @@ export class ProductsController {
     return this.productsService.getAllProducts();
   }
 
+  @Get('search')
+searchProducts(
+  @Query('name') name: string,
+) {
+  return this.productsService.searchProducts(name);
+}
+
+
+@Get('category/:cat')
+findByCategory(
+  @Param('cat') category: string,
+) {
+  return this.productsService.findByCategory(category);
+}
   // Notun product add korbe
   @Post()
   addProduct(@Body() product: CreateProductDto) {

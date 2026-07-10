@@ -75,6 +75,33 @@ async addProduct(
     return await this.getProductById(id);
   }
 
+   // Name diye product search korbo
+
+
+async searchProducts(name: string): Promise<Product[]> {
+   return await this.productRepository
+    .createQueryBuilder('product')
+    .where('LOWER(product.name) LIKE LOWER(:name)', {
+      name: `%${name}%`,
+    })
+    .getMany();
+}
+
+// Category diye product filter korbo
+async findByCategory(
+  category: string,
+): Promise<Product[]> {
+
+  return await this.productRepository.find({
+    where: {
+      category,
+    },
+  });
+}
+
+
+
+
   // Product delete korbe
   async deleteProduct(id: number) {
 
