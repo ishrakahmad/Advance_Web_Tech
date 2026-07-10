@@ -1,6 +1,6 @@
 import { Injectable,  NotFoundException, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -15,9 +15,14 @@ export class ProductsService {
   ) {}
 
   // Sob product fetch korbe
-  async getAllProducts(): Promise<Product[]> {
-    return await this.productRepository.find();
-  }
+  // Sob product newest first dekhabe
+async getAllProducts(): Promise<Product[]> {
+  return await this.productRepository.find({
+    order: {
+      createdAt: 'DESC',
+    },
+  });
+}
 
   // DTO theke product database e save korchi
 async addProduct(
@@ -78,15 +83,17 @@ async addProduct(
    // Name diye product search korbo
 
 
-async searchProducts(name: string): Promise<Product[]> {
-   return await this.productRepository
-    .createQueryBuilder('product')
-    .where('LOWER(product.name) LIKE LOWER(:name)', {
-      name: `%${name}%`,
-    })
-    .getMany();
-}
+// Name diye product search korbo
+async searchProducts(
+  keyword: string,
+): Promise<Product[]> {
 
+  return await this.productRepository.find({
+    where: {
+      name: ILike(`%${keyword}%`),
+    },
+  });
+}
 
 
 // Category diye product filter korbo

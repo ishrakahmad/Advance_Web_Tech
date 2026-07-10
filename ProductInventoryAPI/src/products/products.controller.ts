@@ -36,11 +36,10 @@ export class ProductsController {
 
   @Get('search')
 searchProducts(
-  @Query('name') name: string,
+  @Query('keyword') keyword: string,
 ) {
-  return this.productsService.searchProducts(name);
+  return this.productsService.searchProducts(keyword);
 }
-
 
 @Get('category/:cat')
 findByCategory(
